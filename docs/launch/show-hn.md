@@ -18,4 +18,6 @@ I would value feedback on approval invalidation, crash recovery and whether the 
 contain enough evidence to decide without reading the entire log. Please use synthetic reproductions
 and review the security boundary before trying it on sensitive repositories.
 
-Before posting: insert the verified public repository URL. This draft has not been submitted.
+Repository: https://github.com/ncusspm25/boundaryloop
+
+Maintainer draft; not submitted to Hacker News.

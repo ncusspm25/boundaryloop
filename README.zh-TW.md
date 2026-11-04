@@ -90,9 +90,11 @@ boundaryloop resume RUN_ID
 
 ## 安裝
 
-在專案原始碼目錄：
+從 GitHub 取得原始碼：
 
 ```sh
+git clone https://github.com/ncusspm25/boundaryloop.git
+cd boundaryloop
 python -m venv .venv
 # macOS/Linux: . .venv/bin/activate
 # Windows PowerShell: .\.venv\Scripts\Activate.ps1

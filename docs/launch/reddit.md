@@ -13,5 +13,7 @@ The Codex adapter is real; full runtime sandbox/tool mediation is not implemente
 no measured cost-saving claim. I am looking for technical feedback about false stops and scoped
 approval/recovery behavior, not votes.
 
-Before posting: verify community self-promotion rules, tailor this to one relevant community,
-and insert the verified repository URL. This draft has not been posted.
+Repository: https://github.com/ncusspm25/boundaryloop
+
+Before posting: verify community self-promotion rules and tailor this to one relevant community.
+Maintainer draft; not posted.

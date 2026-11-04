@@ -78,6 +78,9 @@ layout screenshots are not part of this release.
   did not reveal this; the clean wheel installation did. A focused regression test now covers it.
 - Invalidated outstanding approvals on blocked context changes and removed cancelled cards from
   the pending queue. Local interruption stops the run without an automatic architect call.
+- Initial public CI found a Linux-only type-checking failure for a Windows subprocess flag in a
+  conditional expression. An explicit platform branch fixes it without changing runtime policy;
+  type checking is also checked locally for win32, linux and darwin targets.
 
 Full runtime enforcement, native conversation recovery, semantic policy proofs, real Claude calls,
 hard currency caps and comparative live benchmarks remain unsupported/experimental as documented.

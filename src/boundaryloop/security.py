@@ -169,6 +169,9 @@ def run_process(argv: list[str], cwd: Path, timeout: float, stdin: str | None = 
     env.update(PYTHONDONTWRITEBYTECODE="1", PYTHONUNBUFFERED="1")
     # Do not propagate this developer's Python package search path into validators.
     env.pop("PYTHONPATH", None)
+    creationflags = 0
+    if sys.platform == "win32":
+        creationflags = subprocess.CREATE_NEW_PROCESS_GROUP
     with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
         try:
             process = subprocess.Popen(
@@ -179,7 +182,7 @@ def run_process(argv: list[str], cwd: Path, timeout: float, stdin: str | None = 
                 stderr=stderr,
                 env=env,
                 start_new_session=sys.platform != "win32",
-                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0,
+                creationflags=creationflags,
             )
         except OSError as exc:
             return {"exit_code": None, "status": "UNAVAILABLE", "output": redact(str(exc))}

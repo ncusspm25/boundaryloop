@@ -102,9 +102,11 @@ rolling back files. With no response, the run remains `HUMAN_REQUIRED`.
 
 ## Installation
 
-In a checkout:
+From GitHub:
 
 ```sh
+git clone https://github.com/ncusspm25/boundaryloop.git
+cd boundaryloop
 python -m venv .venv
 # macOS/Linux: . .venv/bin/activate
 # Windows PowerShell: .\.venv\Scripts\Activate.ps1

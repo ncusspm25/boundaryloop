@@ -16,4 +16,6 @@ replacement for an OS sandbox.
 The useful feedback now is concrete: what evidence would you need before approving a scope change,
 and which recovery edge case should a coding-agent controller handle first?
 
-Before posting: insert the verified public repository URL. This draft has not been posted.
+Repository: https://github.com/ncusspm25/boundaryloop
+
+Maintainer draft; not posted.
