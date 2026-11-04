@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "provider": "mock",
+  "fixture": "port-parser-v1",
+  "policies": ["strong-only", "strong-plan-weak", "boundaryloop"],
+  "repetitions": 3,
+  "isolation": "fresh temporary directory per policy and repetition",
+  "verification_commands": [["{python}", "verify.py"]],
+  "pricing": null,
+  "live_performance_claim": false
+}

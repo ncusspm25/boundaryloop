@@ -1,0 +1,16 @@
+name: Small contribution proposal
+description: Propose a bounded improvement suitable for a first contribution
+body:
+  - type: textarea
+    id: change
+    attributes:
+      label: Small, concrete improvement
+      description: See CONTRIBUTING.md for real candidates; do not invent an unresolved bug.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Files affected and verification
+    validations:
+      required: true

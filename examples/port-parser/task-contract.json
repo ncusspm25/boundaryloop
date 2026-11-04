@@ -1,0 +1,38 @@
+{
+  "task_id": "port-parser",
+  "objective": "Reject bool and ports outside 1..65535; preserve API",
+  "difficulty": "easy",
+  "contract_version": 1,
+  "approved_scope": [
+    "Repair parser.py only; preserve parse_port(value)"
+  ],
+  "allowed_files": [
+    "parser.py"
+  ],
+  "forbidden_files": [
+    "verify.py",
+    "task-contract.json"
+  ],
+  "allowed_operations": [
+    "write"
+  ],
+  "dependencies": [],
+  "invariants": [
+    "Public signature parse_port(value) is unchanged",
+    "Validation is immutable"
+  ],
+  "acceptance_criteria": [
+    "verify.py succeeds, including bool, range and signature tests"
+  ],
+  "verification_commands": [
+    [
+      "{python}",
+      "verify.py"
+    ]
+  ],
+  "retry_budget": 2,
+  "escalation_policy": {
+    "max_replans": 2
+  },
+  "risk_class": "local-code"
+}

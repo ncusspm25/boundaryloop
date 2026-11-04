@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.11', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install test tools
+        run: python -m pip install -e . pytest
+      - name: Offline tests
+        run: python -m pytest -q
+      - name: Verify CLI
+        run: boundaryloop --help
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m ruff check .
+      - run: python -m ruff format --check .
+      - run: python -m mypy
+      - run: python -m build --no-isolation
+      - name: Install wheel in clean environment
+        run: |
+          python -m venv /tmp/boundaryloop-install
+          /tmp/boundaryloop-install/bin/python -m pip install --no-deps dist/*.whl
+          cd /tmp
+          /tmp/boundaryloop-install/bin/boundaryloop --help
+          /tmp/boundaryloop-install/bin/boundaryloop demo --directory /tmp/boundaryloop-ci-demo
+      - name: Audit source, skill copies and links
+        run: python scripts/release_check.py

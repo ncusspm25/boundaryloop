@@ -1,0 +1,27 @@
+name: Bug report
+description: A reproducible execution, verification or recovery failure
+body:
+  - type: input
+    id: version
+    attributes:
+      label: BoundaryLoop / Python / OS version
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Use synthetic code. Include a redacted contract and the exact CLI command.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted verification evidence
+      description: No state databases, tokens, private paths or raw model transcripts.

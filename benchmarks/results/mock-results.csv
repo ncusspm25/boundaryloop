@@ -1,0 +1,10 @@
+policy,repeat,provider,worker_model,architect_model,verified_success,status,attempts,seconds,repeated_failure_count,strong_interventions,human_interventions,pending_decisions,escalations,cost,input_tokens,output_tokens,escalation_precision,false_escalation_rate,missed_escalation_rate,pricing_metadata,initial_fixture,validator
+strong-only,1,mock,mock-architect,mock-architect,True,COMPLETED,1,0.43767769999976736,0,1,0,0,0,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+strong-plan-weak,1,mock,mock-worker,mock-architect,False,HUMAN_REQUIRED,2,0.6716149999992922,1,1,0,1,0,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+boundaryloop,1,mock,mock-worker,mock-architect,True,COMPLETED,3,0.9067675999976927,1,1,0,0,1,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+strong-only,2,mock,mock-architect,mock-architect,True,COMPLETED,1,0.4355937000073027,0,1,0,0,0,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+strong-plan-weak,2,mock,mock-worker,mock-architect,False,HUMAN_REQUIRED,2,0.67971569999645,1,1,0,1,0,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+boundaryloop,2,mock,mock-worker,mock-architect,True,COMPLETED,3,0.9526181000110228,1,1,0,0,1,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+strong-only,3,mock,mock-architect,mock-architect,True,COMPLETED,1,0.4220735999988392,0,1,0,0,0,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+strong-plan-weak,3,mock,mock-worker,mock-architect,False,HUMAN_REQUIRED,2,0.673816499998793,1,1,0,1,0,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py
+boundaryloop,3,mock,mock-worker,mock-architect,True,COMPLETED,3,0.9363622000091709,1,1,0,0,1,,,,,,,"Not applicable: offline fixture, no model calls",port-parser-v1,python verify.py

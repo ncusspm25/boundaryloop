@@ -1,0 +1,16 @@
+name: Feature request
+description: A concrete missing workflow or control
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What task cannot you complete today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and permission boundary
+      description: Include what evidence would establish that it works.
+    validations:
+      required: true
