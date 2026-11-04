@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import textwrap
 import uuid
 from pathlib import Path
 
@@ -217,6 +218,9 @@ def act(
 
 
 def card(decision: dict) -> str:
+    def concise(value: str, width: int = 180) -> str:
+        return textwrap.shorten(value, width=width, placeholder=" ...")
+
     options = "\n".join(f"  {key}: {value}" for key, value in decision["options"].items())
     title = (
         "DECISION REQUIRED" if decision["status"] in {"PENDING", "DEFERRED"} else "DECISION CARD"
@@ -224,13 +228,14 @@ def card(decision: dict) -> str:
     return (
         f"{title}  {decision['decision_id']}  [{decision['status']}]\n"
         f"Task: {decision['task_id']}  Run: {decision['run_id']}\n"
-        f"Why stopped: {decision['reason']}\n"
-        f"Evidence: {'; '.join(decision['evidence']) or 'No verifier has run yet'}\n"
+        f"Why stopped: {concise(decision['reason'])}\n"
+        f"Evidence: {concise('; '.join(decision['evidence']) or 'No verifier has run yet', 260)}\n"
         f"Already tried: {', '.join(decision['tried']) or 'No repair attempts'}\n"
-        f"Files: {', '.join(decision['affected_files']) or 'No file-scope change'}\n"
+        f"Files: {concise(', '.join(decision['affected_files']) or 'No file-scope change')}\n"
         f"Choose:\n{options}\n"
         f"Recommendation: {decision['recommendation']}\n"
         f"Consequences: {decision['consequences']}\n"
         f"Cost/risk: {decision['risk']}\n"
-        f"No response: {decision['safe_default']}"
+        f"No response: {decision['safe_default']}\n"
+        f"Full details: boundaryloop --json decision show {decision['decision_id']}"
     )

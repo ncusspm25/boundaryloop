@@ -77,6 +77,22 @@ def test_secret_redaction():
     assert "hunter" not in redact("password" + "=" + "hunter")
 
 
+def test_untrusted_logs_cannot_control_terminal_or_clipboard():
+    text = "safe\x1b[31mred\x1b[0m\x1b]52;c;clipboard-data\x07\u202eevil"
+    assert redact(text) == "saferedevil"
+
+
+def test_terminal_controls_cannot_hide_a_secret():
+    token = "ghp_" + "X" * 32
+    output = token[:4] + "\x1b[31m" + token[4:]
+    assert redact(output) == "[REDACTED]"
+
+
+def test_control_character_path_is_rejected():
+    with pytest.raises(SecurityError):
+        relative_name("code\x1b[31m.py")
+
+
 def test_timeout_is_not_pass(tmp_path):
     result = run_process([sys.executable, "-c", "import time; time.sleep(60)"], tmp_path, 0.1)
     assert result["status"] == "TIMEOUT"

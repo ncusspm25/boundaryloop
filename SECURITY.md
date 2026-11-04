@@ -26,6 +26,7 @@ is no claim of race-free mediation against hostile external processes.
 and decisions. Pattern-based redaction catches common secrets but cannot recognize every secret.
 Do not upload state or raw transcripts. Provider authentication remains in the provider's own
 credential storage, never BoundaryLoop config. Scoped context uploads require explicit opt-in.
+Terminal control sequences and bidirectional display overrides are stripped from untrusted output.
 Telemetry and automatic uploads are absent. Model providers may retain data under their policies.
 
 If you discover an authorization bypass, secret disclosure or recovery defect, do not include

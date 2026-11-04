@@ -12,7 +12,7 @@ profile/memory controls, CLI commands and isolated benchmark output. Approve/rej
 tests simulate the interactive terminal boundary while executing real authorization/state logic;
 they do not claim that a human actually entered those decisions in a live model run.
 
-Local result: **104 passed** in 31.87 seconds. `python -m ruff check .`,
+Local result: **107 passed** in 33.96 seconds. `python -m ruff check .`,
 `python -m ruff format --check .` and `python -m mypy` passed (22 source files checked).
 The package build produced both wheel and sdist. Clean wheel installation into a fresh venv,
 CLI help/doctor, the real offline demo, README init/start/status and packaged Skill installation
@@ -81,6 +81,8 @@ layout screenshots are not part of this release.
 - Initial public CI found a Linux-only type-checking failure for a Windows subprocess flag in a
   conditional expression. An explicit platform branch fixes it without changing runtime policy;
   type checking is also checked locally for win32, linux and darwin targets.
+- Untrusted logs have terminal/clipboard control sequences and display-direction overrides stripped;
+  decision cards bound their summary size and link to the full structured record.
 
 Full runtime enforcement, native conversation recovery, semantic policy proofs, real Claude calls,
 hard currency caps and comparative live benchmarks remain unsupported/experimental as documented.

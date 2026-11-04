@@ -246,6 +246,8 @@ class Controller:
             value = validate_response(
                 adapter.invoke(role, spec["model"], self._context(run, phase), timeout)
             )
+            # Proposal content must remain intact for rejection, never silently redacted into code.
+            value = {key: item if key == "files" else clean(item) for key, item in value.items()}
             call["status"] = "RETURNED"
             call.update(getattr(adapter, "last_usage", {}))
             call["provider_session_id"] = getattr(adapter, "last_session_id", None)

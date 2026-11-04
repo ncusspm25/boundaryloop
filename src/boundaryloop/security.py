@@ -43,6 +43,17 @@ RESERVED = {
 
 
 def redact(text: str) -> str:
+    # Untrusted provider/validator text must not issue terminal control or clipboard commands.
+    text = re.sub(r"\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)", "", text)
+    text = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", text)
+    text = "".join(
+        c
+        for c in text
+        if (ord(c) >= 32 or c in "\n\t")
+        and ord(c) != 127
+        and not 0x202A <= ord(c) <= 0x202E
+        and not 0x2066 <= ord(c) <= 0x2069
+    )
     for pattern in SECRET_PATTERNS:
         text = re.sub(pattern, "[REDACTED]", text)
     return text
@@ -109,6 +120,11 @@ def actor_id() -> str:
 
 
 def relative_name(name: str) -> str:
+    if isinstance(name, str) and (
+        any(ord(c) < 32 or ord(c) == 127 for c in name)
+        or any(0x202A <= ord(c) <= 0x202E or 0x2066 <= ord(c) <= 0x2069 for c in name)
+    ):
+        raise SecurityError("Control/display-override characters are forbidden in paths")
     if not isinstance(name, str) or not name or "\\" in name or ":" in name or "\x00" in name:
         raise SecurityError(f"Invalid relative path: {name!r}")
     p = PurePosixPath(name)
