@@ -2,6 +2,17 @@
 
 Human-governed coding agent orchestration with bounded retries, focused escalation and resumable execution.
 
+**繁體中文介紹**
+
+BoundaryLoop 是搭配 Codex Skill 使用的開源工具。開始前，你選擇任務難度、指定可修改的檔案與驗證方式。
+當 Worker 重複失敗，BoundaryLoop 會停止重試、保存進度，並把失敗證據與試過的修法交給 Architect。
+需要擴大修改範圍時，流程會停在決策卡，等你批准或拒絕。
+
+Skill 引導 Codex 操作，Python CLI 負責檢查修改範圍、限制重試次數並執行獨立驗證。
+安裝後可以用 `boundaryloop demo` 看到完整流程。示範採用模擬模型回應，檔案修改和 Python 測試都會實際執行。
+
+[完整繁體中文說明與安裝步驟](README.zh-TW.md)
+
 A coding agent can spend several patches fixing the same failing test. A better plan alone does
 not stop that loop. BoundaryLoop limits the worker's attempts, preserves its work, and hands the
 specific failure to an architect model or a human.
@@ -21,7 +32,7 @@ VALIDATOR: PASS (attempt 3)
 ```
 
 Install from a source checkout with Python 3.11+: `python -m pip install .`
-No runtime dependencies. **v0.1.0 is experimental.** [繁體中文](README.zh-TW.md)
+No runtime dependencies. **v0.1.0 is experimental.**
 
 ## Demo
 
