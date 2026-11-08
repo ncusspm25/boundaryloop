@@ -1,0 +1,5 @@
+interface:
+  display_name: "BoundaryLoop"
+  short_description: "Run and recover human-governed coding tasks"
+policy:
+  allow_implicit_invocation: false

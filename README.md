@@ -1,6 +1,8 @@
 # BoundaryLoop
 
-Human-governed coding agent orchestration with bounded retries, focused escalation and resumable execution.
+[English quick start](#quick-start) · [繁體中文](README.zh-TW.md)
+
+**Keep coding-agent retries bounded, decisions reviewable, and work resumable.**
 
 **繁體中文介紹**
 
@@ -11,11 +13,24 @@ BoundaryLoop 是搭配 Codex Skill 使用的開源工具。開始前，你選擇
 Skill 引導 Codex 操作，Python CLI 負責檢查修改範圍、限制重試次數並執行獨立驗證。
 安裝後可以用 `boundaryloop demo` 看到完整流程。示範採用模擬模型回應，檔案修改和 Python 測試都會實際執行。
 
-[完整繁體中文說明與安裝步驟](README.zh-TW.md)
+[查看 Skill](.agents/skills/boundaryloop/SKILL.md) · [架構圖](#architecture) ·
+[跨專案使用](#use-the-codex-skill-across-projects) · [完整繁體中文說明](README.zh-TW.md)
 
-A coding agent can spend several patches fixing the same failing test. A better plan alone does
-not stop that loop. BoundaryLoop limits the worker's attempts, preserves its work, and hands the
-specific failure to an architect model or a human.
+## Quick start
+
+Install from a source checkout with Python 3.11 or newer. The CLI has no runtime dependencies.
+
+```sh
+git clone https://github.com/ncusspm25/boundaryloop.git
+cd boundaryloop
+python -m venv .venv
+# macOS/Linux: . .venv/bin/activate
+# Windows PowerShell: .\.venv\Scripts\Activate.ps1
+python -m pip install .
+boundaryloop demo
+```
+
+The demo uses mock model responses and runs the actual controller and Python tests.
 
 ```text
 $ boundaryloop demo
@@ -31,8 +46,67 @@ WORKER [mock / mock-worker] implementation
 VALIDATOR: PASS (attempt 3)
 ```
 
-Install from a source checkout with Python 3.11+: `python -m pip install .`
-No runtime dependencies. **v0.1.0 is experimental.**
+The **v0.1.0 prerelease** also includes a wheel. Follow your local package and network-install policies. [Release assets](https://github.com/ncusspm25/boundaryloop/releases/tag/v0.1.0)
+
+## Architecture
+
+```mermaid
+flowchart TD
+    Human["Human · task scope, difficulty and verification"] --> Skill["Codex Skill · guides the workflow"]
+    Skill --> Controller["BoundaryLoop CLI · checks the task contract"]
+    Controller -->|Easy| Worker["Worker · proposes file changes"]
+    Controller -->|Hard| Planner["Architect · plans bounded subtasks"]
+    Planner --> Worker
+    Worker --> Gate["Controller · checks scope and applies valid changes"]
+    Gate --> Validator["Independent validator · runs approved commands"]
+    Validator -->|Pass| Receipt["Verified result and execution receipt"]
+    Validator -->|Fail| Budget{"Can the run retry?"}
+    Budget -->|Within limits| Worker
+    Budget -->|Escalate| Diagnose["Architect · reviews the evidence ticket"]
+    Diagnose -->|Repair plan| Worker
+    Diagnose -->|Takeover| Implement["Architect · proposes file changes"]
+    Implement --> Gate
+    Diagnose -->|New authority needed| Decision["Decision card · human approval or rejection"]
+    Controller -->|Authorization needed| Decision
+    Decision -->|Resume when allowed| Controller
+    Controller -.-> State[("Local SQLite · checkpoints, decisions and evidence")]
+```
+
+The CLI also works directly from a terminal. It checks proposals against the task contract and
+uses the validator's observed results to decide whether a run can complete. Only a human can
+grant authority beyond the contract. [Implementation details](docs/ARCHITECTURE.md)
+
+## Use the Codex Skill across projects
+
+After installing the CLI from `main`, choose one scope. Keep the CLI available in the terminal
+environment where Codex runs.
+
+| Scope | Skill directory |
+| --- | --- |
+| All projects for your user account | `~/.agents/skills/boundaryloop/` |
+| One project | `.agents/skills/boundaryloop/` in that project |
+
+For a user-level installation, run the command for your shell.
+
+```sh
+boundaryloop skill install --destination "$HOME/.agents/skills/boundaryloop"
+```
+
+```powershell
+boundaryloop skill install --destination (Join-Path $env:USERPROFILE '.agents/skills/boundaryloop')
+```
+
+For one project, run `boundaryloop --root /path/to/repository skill install`. Use a fresh
+destination. The installer preserves an existing Skill directory.
+
+The bundled invocation policy is explicit-only. In Codex, select `$boundaryloop` and try:
+
+```text
+Use $boundaryloop to inspect my current run and show any pending decision.
+```
+
+Restart Codex if the Skill does not appear. To remove user-level discovery, move the installed
+Skill directory out of `~/.agents/skills/`. [Codex Skill discovery](https://developers.openai.com/codex/skills) · [Runtime support](docs/RUNTIME_SUPPORT.md)
 
 ## Demo
 
@@ -111,25 +185,7 @@ Approval records bind the task, contract, configuration and checkpoint. Material
 invalidate them; rejection preserves the original scope. Revocation stops future work without
 rolling back files. With no response, the run remains `HUMAN_REQUIRED`.
 
-## Installation
-
-From GitHub:
-
-```sh
-git clone https://github.com/ncusspm25/boundaryloop.git
-cd boundaryloop
-python -m venv .venv
-# macOS/Linux: . .venv/bin/activate
-# Windows PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install .
-boundaryloop --help
-boundaryloop doctor
-```
-
-This release is not published to PyPI. Build your own wheel with `python -m build`.
-Follow your organization's package and network-install policies.
-
-## Quickstart
+## Run on a repository
 
 For a fresh example directory:
 
@@ -178,15 +234,6 @@ provider billing evidence; this version supports call/time limits, not hard curr
 Local failure memory is on; telemetry and adaptive profiles are off. `memory --clear`,
 `profile --reset`, and `config set learning false` let you control retained observations.
 Profile records show actual verified outcomes and sample counts, not a routing guarantee.
-
-Install the packaged Codex Skill into another repository without a network download:
-
-```sh
-boundaryloop --root /path/to/repository skill install
-```
-
-Restart Codex to refresh discovery. The repository copy lives in `.agents/skills/boundaryloop/`.
-[Runtime capabilities and official sources](docs/RUNTIME_SUPPORT.md).
 
 ## What it does not do
 

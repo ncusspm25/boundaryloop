@@ -1,5 +1,7 @@
 # BoundaryLoop
 
+[架構圖](README.md#architecture) · [English](README.md)
+
 以人類授權為邊界的 coding agent 控制器：限制重試、帶著證據升級問題，並從 checkpoint 繼續工作。
 
 Coding agent 有時會反覆修改同一個失敗的測試。先給它一份更好的計畫，也不一定能避免卡住。
@@ -146,14 +148,25 @@ Codex adapter 真正呼叫 `codex exec --model ... --sandbox read-only --output-
 本機失敗記憶預設開啟，遙測與能力統計預設關閉。可使用 `memory --clear`、`profile --reset`、
 `config set learning false` 管理資料。統計只顯示實際驗證結果與樣本，不保證模型能力。
 
-把隨套件附上的 Codex Skill 安裝到其他專案，不需額外下載：
+從 `main` 安裝 CLI 後，可以將 Skill 加到個人目錄，讓所有專案都能找到它。
+
+```powershell
+boundaryloop skill install --destination (Join-Path $env:USERPROFILE '.agents/skills/boundaryloop')
+```
+
+```sh
+boundaryloop skill install --destination "$HOME/.agents/skills/boundaryloop"
+```
+
+只在單一專案使用時，執行以下命令。
 
 ```sh
 boundaryloop --root /path/to/repository skill install
 ```
 
-重新啟動 Codex 以更新 discovery。此倉庫的副本位於 `.agents/skills/boundaryloop/`。
-[Runtime 支援狀態與官方來源](docs/RUNTIME_SUPPORT.md)。
+安裝後，在 Codex 選 `$boundaryloop`，例如「用 `$boundaryloop` 查看目前的 run 和待處理的決策」。
+套件的呼叫設定要求明確選用 Skill。請在 Codex 使用的環境備妥 CLI。如果清單還沒出現，重新啟動 Codex。
+[架構圖](README.md#architecture) · [Runtime 支援狀態與官方來源](docs/RUNTIME_SUPPORT.md)
 
 ## 目前不做的事
 

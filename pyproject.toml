@@ -27,7 +27,7 @@ dev = ["pytest>=8", "ruff>=0.9", "mypy>=1.14", "build>=1.2", "setuptools>=77"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-boundaryloop = ["skill/SKILL.md", "skill/references/*.md", "skill/scripts/*.py"]
+boundaryloop = ["skill/SKILL.md", "skill/agents/*.yaml", "skill/references/*.md", "skill/scripts/*.py"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

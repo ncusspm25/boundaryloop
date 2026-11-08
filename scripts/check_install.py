@@ -62,6 +62,10 @@ def main() -> int:
         skill = project / ".agents/skills/boundaryloop"
         if not (skill / "SKILL.md").is_file() or list(skill.rglob("*.pyc")):
             raise RuntimeError("Packaged skill missing or bytecode leaked")
+        if "allow_implicit_invocation: false" not in (skill / "agents/openai.yaml").read_text(
+            encoding="utf-8"
+        ):
+            raise RuntimeError("Packaged skill must retain its explicit-only invocation policy")
     print("PASS: clean wheel install, help, doctor, demo, README quickstart, packaged Skill")
     return 0
 
