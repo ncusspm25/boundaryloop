@@ -52,29 +52,19 @@ The **v0.1.0 prerelease** also includes a wheel. Follow your local package and n
 
 ```mermaid
 flowchart TD
-    Human["Human · task scope, difficulty and verification"] --> Skill["Codex Skill · guides the workflow"]
-    Skill --> Controller["BoundaryLoop CLI · checks the task contract"]
-    Controller -->|Easy| Worker["Worker · proposes file changes"]
-    Controller -->|Hard| Planner["Architect · plans bounded subtasks"]
-    Planner --> Worker
-    Worker --> Gate["Controller · checks scope and applies valid changes"]
-    Gate --> Validator["Independent validator · runs approved commands"]
-    Validator -->|Pass| Receipt["Verified result and execution receipt"]
-    Validator -->|Fail| Budget{"Can the run retry?"}
-    Budget -->|Within limits| Worker
-    Budget -->|Escalate| Diagnose["Architect · reviews the evidence ticket"]
-    Diagnose -->|Repair plan| Worker
-    Diagnose -->|Takeover| Implement["Architect · proposes file changes"]
-    Implement --> Gate
-    Diagnose -->|New authority needed| Decision["Decision card · human approval or rejection"]
-    Controller -->|Authorization needed| Decision
-    Decision -->|Resume when allowed| Controller
-    Controller -.-> State[("Local SQLite · checkpoints, decisions and evidence")]
+    Human["Human · task contract and decisions"] --> Skill["Codex Skill"]
+    Skill --> CLI["BoundaryLoop CLI · scope, retries and escalation"]
+    Human -->|Terminal| CLI
+    CLI <-->|Plans and proposals| Agents["Architect and Worker"]
+    CLI <-->|Commands and results| Validator["Independent validator"]
+    CLI <-->|Checkpoints and evidence| State[("Local SQLite")]
+    CLI --> Outcome["Verified receipt or decision card"]
 ```
 
-The CLI also works directly from a terminal. It checks proposals against the task contract and
-uses the validator's observed results to decide whether a run can complete. Only a human can
-grant authority beyond the contract. [Implementation details](docs/ARCHITECTURE.md)
+Easy sends the task to the Worker. Hard starts with an Architect plan. The CLI checks the
+proposed changes against the task contract and completes the run when verification passes.
+Failures can lead to a bounded retry or an Architect review of the evidence ticket. A decision
+card pauses the run when it needs new human authority. [Implementation details](docs/ARCHITECTURE.md)
 
 ## Use the Codex Skill across projects
 
